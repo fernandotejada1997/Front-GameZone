@@ -44,7 +44,7 @@ const ReviewsModif = () => {
     } else {
       //event.preventDefault();
       history.push(`/detail/${idsGames}`)
-      axios.put("http://localhost:3001/user/review", form, id)
+      axios.put("https://back-gamezone-production.up.railway.app/user/review", form, id)
       Swal.fire({
           position: "center",
           icon: "success",

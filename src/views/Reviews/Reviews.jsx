@@ -42,7 +42,7 @@ const Review = () => {
     } 
     event.preventDefault();
     history.push(`/detail/${gameRe.id}`)
-    axios.post("http://localhost:3001/user/review", form, IDUser, name, id)
+    axios.post("https://back-gamezone-production.up.railway.app/user/review", form, IDUser, name, id)
       Swal.fire({
         position: "center",
         icon: "success",
