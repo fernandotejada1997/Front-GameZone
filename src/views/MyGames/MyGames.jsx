@@ -43,7 +43,7 @@ const MyGames = () => {
       Swal.fire({
         position: "center",
         icon: "question",
-        title: "sin reviews para editar",
+        title: "You haven´t reviewed this game.",
         showConfirmButton: false,
         timer: 2000,
       });
@@ -73,16 +73,16 @@ const MyGames = () => {
           dispatch(act.getDeleteReview(idD));
         }
       }
-      Swal.fire({
-        position: "center",
-        icon: "question",
-        title: "No reviews added",
-        showConfirmButton: false,
-        timer: 2000,
-      });
-      return;
-    }
-  };
+    }else{
+    Swal.fire({
+      position: "center",
+      icon: "question",
+      title: "No reviews added",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+    return;
+  }}
   return (
     <div className={style.container}>
       <div className={style.cardContainer}>

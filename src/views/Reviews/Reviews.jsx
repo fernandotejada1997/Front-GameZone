@@ -93,7 +93,7 @@ const Review = () => {
           {renderStars()}
         </div>
       </div>
-      <button className={style.button} type="submit">Crear Review</button>
+      <button className={style.button} type="submit">Create Review</button>
       </div>
     </form>
     </div>
