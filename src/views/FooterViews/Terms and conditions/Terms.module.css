@@ -1,0 +1,64 @@
+.container{
+    /* outline: red solid 3px; */
+    /* display: flex; */
+    height: auto;
+    width: auto;
+    background: url("../../../assets/Imagen1.png");
+    backdrop-filter: blur(10px);
+    background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+    /* margin: 0%; */
+
+}
+
+.title{
+    /* outline: yellow solid 3px; */
+    /* display: flex; */
+    font-size: 40px;
+    /* white-space: nowrap; */
+    color: white;
+    justify-content: center;
+}
+
+.containerText{
+/* outline: white solid 3px; */
+margin-right: 10%;
+margin-left: 10%;
+margin-top: 5%;
+/* margin-bottom: calc(10% - 20px); */
+background-color: #343434;
+font-size: 20px;
+text-align: left;
+padding: 40px;
+color:white;
+height: auto;
+}
+
+.containerText p {
+    margin-bottom: 30px; 
+  }
+
+
+  .backButton{
+    /* outline: red solid 3px; */
+    display: flex;
+    width: 60px;
+    height: 60px;
+    background-color: transparent;
+    text-align: left;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: none;
+    margin-top: 10px;
+    margin-bottom: 0%;
+    margin-left: 30px;
+    font-weight: bold;
+    font-size: 50px;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    
+  }

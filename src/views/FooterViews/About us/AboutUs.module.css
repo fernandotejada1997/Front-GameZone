@@ -1,0 +1,133 @@
+.container{
+    /* display: flex; */
+    height: auto;
+    /* width: 100vw; */
+    background: url("../../../assets/Imagen1.png");
+    backdrop-filter: blur(10px);
+    background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+    background-color:#070707;
+}
+
+.title{
+    /* outline: yellow solid 3px;
+    /* display: flex; */
+    font-size: 40px;
+    white-space: nowrap;
+    color: white;
+    justify-content: center; 
+}
+
+.container2{
+    /* outline: white solid 3px; */
+    height: 1100px;
+    
+}
+
+.containerleft{
+    /* outline: red solid 3px; */
+    height: 1100px;
+    width: 50%;
+    float: left;
+    
+}
+
+.containerright{
+    /* outline: pink solid 3px; */
+    height: 1100px;
+    width: 50%;
+    float: right;
+}
+
+.containerEmployee{
+    /* outline: grey solid 3px; */
+    height: 200px;
+    width: 70%;
+    /* margin: auto; */
+    margin-top: 30px;
+    margin-left: 15%;
+    background-color: #343434;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.end{
+    color:  rgb(206, 206, 206);
+}
+
+.containerImage{
+/* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/585e4beacb11b227491c3399.png");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px
+
+}
+.containerText{
+/* outline: green solid 3px; */
+float: right;
+height: 150px;
+width: 65%;
+margin-right: 20px;
+margin-top: 25px;
+color:  white;
+
+}
+
+.containerEmployee::after {
+    content: "";
+    display: table;
+    clear: both;
+    margin: 30px;
+  }
+
+  .containerImage1{
+    /* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/Imagen\ Jero.jpg");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px;
+border-radius: 50%;
+  }
+  
+  .containerImage3{
+    /* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/Imagen\ Fer.jpg");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px;
+border-radius: 50%;
+  }
+
+  .backButton{
+    /* outline: red solid 3px; */
+    display: flex;
+    width: 60px;
+    height: 60px;
+    background-color: transparent;
+    text-align: left;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: none;
+    margin-top: 10px;
+    margin-bottom: 0%;
+    margin-left: 30px;
+    font-weight: bold;
+    font-size: 50px;
+    cursor: pointer;
+    color: white;
+    position: absolute;
+    
+  }
