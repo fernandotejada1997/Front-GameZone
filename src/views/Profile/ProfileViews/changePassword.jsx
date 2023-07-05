@@ -73,7 +73,7 @@ const ChangePassword = () => {
 
             if (!datosUser.password) {
                 if ( newPasswordError || confirmNewPasswordError) {
-                    return; // Detener la ejecución si hay errores de validación
+                    return; // Detener la ejecución si hay errores de validació
                 }
 
                 await dispatch(updatePassword(datosUser.id, "", newPassword, confirmNewPassword))
