@@ -4,70 +4,87 @@ import style from "./ProfileView.module.css";
 import * as act from "../../../redux/actions";
 import countries from "./countries";
 import ShoppingView from "./ShoppingView";
+import { save } from 'redux-localstorage-simple';
 
 const ProfileView = (props) => {
   const dispatch = useDispatch();
 
-  const datosUser = JSON.parse(localStorage.getItem("user"));
-
+  const [datosUser, setDatosUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [editingName, setEditingName] = useState(false);
   const [editingUserName, setEditingUserName] = useState(false);
   const [editingCountry, setEditingCountry] = useState(false);
-
   const [newName, setNewName] = useState("");
   const [newUserName, setNewUserName] = useState("");
   const [newCountry, setNewCountry] = useState("");
 
   useEffect(() => {
-    dispatch(act.getUserStorage(datosUser?.id));
-    dispatch(act.postLogin());
-    setNewName(datosUser?.name);
-    setNewUserName(datosUser?.user_name);
-    setNewCountry(datosUser?.country);
-    return () => {
-      dispatch(act.CleanDetail());
-    };
-  }, [dispatch]);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setDatosUser(storedUser);
+      setNewName(storedUser.name);
+      setNewUserName(storedUser.user_name);
+      setNewCountry(storedUser.country);
+    }
+  }, []);
+
+  useEffect(() => {
+    const functionData = async () => {
+        try {
+            let info;
+            const data = await dispatch(act.getUserStorage(datosUser.id))
+            info = data.payload
+            localStorage.setItem("user", JSON.stringify(info));
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    functionData();
+}, [editingCountry, editingName, editingUserName])
 
   const handleEditNameClick = () => {
     setEditingName(true);
-//    setEditingUserName(false);
-//    setEditingCountry(false);
     setNewName(datosUser?.name);
   };
 
   const handleEditUserNameClick = () => {
-//    setEditingName(false);
     setEditingUserName(true);
-//    setEditingCountry(false);
     setNewUserName(datosUser?.user_name);
   };
 
   const handleEditCountryClick = () => {
-//    setEditingName(false);
-//    setEditingUserName(false);
     setEditingCountry(true);
     setNewCountry(datosUser?.country);
   };
 
   const handleSaveClick = () => {
+    let updatedUser
     if (editingName) {
       dispatch(act.editName(datosUser?.id, newName));
+      console.log(newName);
+      updatedUser = { ...datosUser, name: newName };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setDatosUser(updatedUser);
       setEditingName(false);
-      localStorage.setItem("user", JSON.stringify({ ...datosUser, name: newName }));
     }
     if (editingUserName) {
       dispatch(act.editUserName(datosUser?.id, newUserName));
+      console.log(newUserName);
+      updatedUser = { ...datosUser, user_name: newUserName };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setDatosUser(updatedUser);
       setEditingUserName(false);
-      localStorage.setItem("user", JSON.stringify({ ...datosUser, user_name: newUserName }));
     }
     if (editingCountry) {
       dispatch(act.editCountry(datosUser?.id, newCountry));
+      console.log(newCountry);
+      updatedUser = { ...datosUser, country: newCountry };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setDatosUser(updatedUser);
       setEditingCountry(false);
-      localStorage.setItem("user", JSON.stringify({ ...datosUser, country: newCountry }));
     }
+    save({ user: updatedUser });
   };
-
+  
   const handleCancelClick = () => {
     setEditingName(false);
     setEditingUserName(false);
@@ -91,42 +108,48 @@ const ProfileView = (props) => {
 
   return (
     <div className={style.container}>
-      <h1>Profile</h1>
+      <br />
+      <h1 className={style.text}>Profile</h1>
+      <br /><br />
+      <img className={style.image} src={datosUser?.profileImage} alt="Profile" />
+      <ShoppingView />
       <div>
-        <img className={style.image} src={datosUser?.profileImage} alt="Profile" />
-        <h2>
-          Name:{" "}
+      <br /><br />
+      <h3 className={style.textProfile}> Name: </h3>
+          <h3  className={style.textP}>
           {editingName ? (
             <input
+              className={style.input}
               type="text"
               value={newName}
               onChange={handleNameChange}
               placeholder={datosUser?.name}
             />
           ) : (
-            datosUser?.name || ""
+            datosUser?.name
           )}
-        </h2>
-        <h3>
-          User name:{" "}
-          {!editingName ? (
+        </h3>
+        <h3 className={style.textProfile}> User Name: </h3>
+          <h3  className={style.textP}>
+          {
             editingUserName ? (
               <input
+                className={style.input}
                 type="text"
                 value={newUserName}
                 onChange={handleUserNameChange}
                 placeholder={datosUser?.user_name}
               />
             ) : (
-              datosUser?.user_name || ""
+              datosUser?.user_name
             )
-          ) : null}
+            }
         </h3>
-        <h3>
-          Country:{" "}
+        <h3 className={style.textProfile}> Country: </h3>
+          <h3  className={style.textP}>
           {editingCountry ? (
-            <select value={newCountry} onChange={handleCountryChange}>
-              <option value="">Select a country</option>
+            <select value={newCountry} onChange={handleCountryChange} className={style.select}>
+              <option value="" className={style.holder}>Select a country</option>
               {countries.map((country) => (
                 <option key={country} value={country}>
                   {country}
@@ -134,17 +157,17 @@ const ProfileView = (props) => {
               ))}
             </select>
           ) : (
-            datosUser?.country || ""
+            datosUser?.country
           )}
         </h3>
         {!editingName && (
-        <button onClick={handleEditNameClick} className={style.button}>
-          Edit Name
-        </button>
+          <button onClick={handleEditNameClick} className={style.button}>
+            Edit Name
+          </button>
         )}
         {editingName && (
           <>
-            <button onClick={handleSaveClick} className={style.saveButton}>
+            <button onClick={handleSaveClick} className={style.button}>
               Save
             </button>
             <button onClick={handleCancelClick} className={style.button}>
@@ -159,7 +182,7 @@ const ProfileView = (props) => {
         )}
         {editingUserName && (
           <>
-            <button onClick={handleSaveClick} className={style.saveButton}>
+            <button onClick={handleSaveClick} className={style.button}>
               Save
             </button>
             <button onClick={handleCancelClick} className={style.button}>
@@ -174,7 +197,7 @@ const ProfileView = (props) => {
         )}
         {editingCountry && (
           <>
-            <button onClick={handleSaveClick} className={style.saveButton}>
+            <button onClick={handleSaveClick} className={style.button}>
               Save
             </button>
             <button onClick={handleCancelClick} className={style.button}>
@@ -182,10 +205,9 @@ const ProfileView = (props) => {
             </button>
           </>
         )}
-        <ShoppingView/>
       </div>
     </div>
   );
-};
+}  
 
 export default ProfileView;
