@@ -254,7 +254,7 @@ export const TableDb = () => {
         const formDataHeader = new FormData();
         formDataHeader.append('file', selectedHeaderImage);
         const responseHeader = await axios.put(
-          `https://back-gamezone-y96h.onrender.com/uploadHeader/${editingGameId}`,
+          `https://back-gamezone-production.up.railway.app/uploadHeader/${editingGameId}`,
           formDataHeader,
           {
             headers: {
@@ -277,7 +277,7 @@ export const TableDb = () => {
         formDataCapsule.append('file', selectedCapsuleImage);
 
         const responseCapsule = await axios.put(
-          `https://back-gamezone-y96h.onrender.com/uploadCapsule/${editingGameId}`,
+          `https://back-gamezone-production.up.railway.app/uploadCapsule/${editingGameId}`,
           formDataCapsule,
           {
             headers: {

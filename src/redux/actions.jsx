@@ -106,7 +106,7 @@ export const infoGamesAdmin = (id) => {
 
 //userlist
 export const getUsers = () => {
-    const endpoint = `https://back-gamezone-y96h.onrender.com/users`;
+    const endpoint = `https://back-gamezone-production.up.railway.app/users`;
     return async (dispatch) => {
         const {data} = await axios.get(endpoint);
         console.log("SSSSSSSS", data);
@@ -120,7 +120,7 @@ export const getUsers = () => {
 export const editUser = (id, updatedUser) => {
     return async (dispatch) => {
       try {
-        const endpoint = `https://back-gamezone-y96h.onrender.com/users/${id}`;
+        const endpoint = `https://back-gamezone-production.up.railway.app/users/${id}`;
         const response = await axios.put(endpoint, updatedUser);
   
         dispatch(getUsers());
@@ -138,7 +138,7 @@ export const editUser = (id, updatedUser) => {
   export const deleteUser = (id) => {
     return async function(dispatch) {
       try {
-        const endpoint = `https://back-gamezone-y96h.onrender.com/users/${id}`;
+        const endpoint = `https://back-gamezone-production.up.railway.app/users/${id}`;
         await axios.delete(endpoint);
         dispatch({ type: 'DELETEDATAUSER' });
       } catch (error) {
@@ -151,7 +151,7 @@ export const editUser = (id, updatedUser) => {
   export const banUser = (userId, banStatus) => {
     return (dispatch) => {
     
-      fetch(`https://back-gamezone-y96h.onrender.com/users/${userId}/ban`, { 
+      fetch(`https://back-gamezone-production.up.railway.app/users/${userId}/ban`, { 
         method: 'PUT',
         body: JSON.stringify({ ban: banStatus }),
         headers: {
@@ -201,7 +201,7 @@ export const deleteGamesAdmin = (id) => {
 export const loginGoogleFirebase = (datosGoogle) => {
     return async function (dispatch) {
         try {
-            const login = await axios.post("https://back-gamezone-y96h.onrender.com/firebaseGoogle", datosGoogle)
+            const login = await axios.post("https://back-gamezone-production.up.railway.app/firebaseGoogle", datosGoogle)
             //console.log(login)
             console.log(login.data)
             return dispatch({
@@ -751,7 +751,7 @@ export const logoutUser = () => {
 export const loginGoogle = () => {
     return function (dispatch) {
         try {
-            const login = window.open("https://back-gamezone-y96h.onrender.com/auth/google", "_self")
+            const login = window.open("https://back-gamezone-production.up.railway.app/auth/google", "_self")
             console.log(login)
         } catch (error) {
             console.log(error)
@@ -789,7 +789,7 @@ export const getDataGoogle = () => {
 export const logoutGoogle = () => {
     return async (dispatch) => {
         try {
-            const logoutTwo = await window.open("https://back-gamezone-y96h.onrender.com/auth/logout", "_self")
+            const logoutTwo = await window.open("https://back-gamezone-production.up.railway.app/auth/logout", "_self")
             console.log(logoutTwo)
             return dispatch({
                 type : LOGOUT_USERGOOGLE

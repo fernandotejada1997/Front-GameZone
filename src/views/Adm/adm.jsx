@@ -241,7 +241,7 @@ function Dashboard() {
   // };
   const createUser = async () => {
     try {
-      const response = await fetch('https://back-gamezone-y96h.onrender.com/users', {
+      const response = await fetch('https://back-gamezone-production.up.railway.app/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -267,7 +267,7 @@ function Dashboard() {
 
   const createGames = async () => {
     try {
-      const response = await fetch('https://back-gamezone-y96h.onrender.com/games', {
+      const response = await fetch('https://back-gamezone-production.up.railway.app/games', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

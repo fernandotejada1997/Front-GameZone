@@ -23,7 +23,7 @@ const ShoppingView = () => {
       formData.append('file', selectedImage);
       console.log(selectedImage);
 
-      const response = await axios.post('https://back-gamezone-y96h.onrender.com/upload', formData, {
+      const response = await axios.post('https://back-gamezone-production.up.railway.app/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           datosUser: JSON.stringify(datosUser.id),
