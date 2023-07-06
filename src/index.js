@@ -10,7 +10,6 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 //axios.defaults.baseURL = "http://localhost:3001/";
 axios.defaults.baseURL = "https://back-gamezone-production.up.railway.app/"
-//axios.defaults.baseURL = "https://back-gamezone-y96h.onrender.com/"
 
 ReactDOM.render(
 
