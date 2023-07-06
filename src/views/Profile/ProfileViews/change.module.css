@@ -1,0 +1,68 @@
+.change_password {
+    font-size: 40px;
+    margin-top: 100px;
+    color: aliceblue;
+    margin-bottom: 100px;
+  }
+  .text{
+    font-size: large;
+    text-align: center;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(255, 255, 255);
+    margin-bottom: 50px;
+  }
+  .Form {
+    color: rgb(255, 255, 255);
+    width: 300px;
+    margin: 0 auto;
+    height: 400px;
+  }
+  
+  .Form form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Form label {
+    margin-top: 10px;
+  }
+  
+  .Form input {
+    border-radius: 8px ;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .erro {
+    color: red;
+  }
+  
+  .Form button {
+    border-radius: 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+
+  
+  .Form button:hover {
+    background-color: #45a049;
+  }
+  .input_group {
+    flex-wrap:wrap-reverse;
+    position: relative;
+    align-items:flex-end;
+    right: 117px;
+    width: 500px;
+    border: 10px;
+    padding:10px;
+    margin-bottom: 23px; 
+  }
+  .input_group > label{
+    display: flex;
+    font-size: large;
+    flex-direction: column;
+  }

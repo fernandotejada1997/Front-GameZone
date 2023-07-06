@@ -17,15 +17,16 @@ import { Switch } from '@material-ui/core';
 import { Checkbox } from '@material-ui/core';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import TableCell from '@mui/material/TableCell';
 import style from "./tabla.module.css";
 
 export const TableDb = () => {
 
   const dispatch = useDispatch();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteRowIndex, setDeleteRowIndex] = useState(null);
+
   const [showGameInfo, setShowGameInfo] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editDialogOpen01, setEditDialogOpen01] = useState(false);
   const [editingGameId, setEditingGameId] = useState();
   
   const [isFree, setIsFree] = useState(false);
@@ -53,10 +54,11 @@ export const TableDb = () => {
   const [selectedGameId, setSelectedGameId] = useState(null);
 
   const [isGameBlocked, setGameBlocked] = useState(false);
+  const [isGameDelete, setGameDelete] = useState(false);
   const [isGameEdit, setGameEdit] = useState(false);
 
   const AllGamesAdmin = useSelector((state) => state.gamesAdmin);
-  //console.log(AllGamesAdmin)
+  
   const idGamesAdmin = useSelector((state) => state.gamesInfoId);
   const developers = useSelector((state) => state.developersGames);
 
@@ -86,32 +88,56 @@ export const TableDb = () => {
   }
 
   const handleDelete = (rowIndex) => {
-    setDeleteRowIndex(rowIndex);
-    setDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    const newData = [...data];
-    const rowData = data[deleteRowIndex];
+    const rowData = data[rowIndex];
     const gameId = rowData.id;
-    newData.splice(deleteRowIndex, 1);
-    dispatch(act.deleteGamesAdmin(gameId));
-    setDeleteDialogOpen(false);
+    
+    Swal.fire({
+      title: 'Are you sure to delete the game?',
+      text: 'This action can not be undone',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(act.deleteGamesAdmin(gameId));
+        dispatch(act.infoGamesAdmin(gameId));
+
+        setGameDelete(true);
+
+        Swal.fire({
+          title: 'Game removed!',
+          icon: 'success',
+          text: 'The game has been successfully removed.',
+        }).then(() => {
+          setGameDelete(false);
+        })
+      } else {
+        Swal.fire({
+          title: 'Action cancelled!',
+          icon: 'info',
+          text: 'The game was not deleted!',
+        });
+      }
+    });
   };
 
-  const cancelDelete = () => {
-    setDeleteDialogOpen(false);
-  };
+  useEffect(() => {
+    if (isGameDelete) {
+      dispatch(act.allGamesAdmin());
+    }
+  }, [isGameDelete, dispatch]);
 
   const handleBan = (rowIndex) => {
     const rowData = data[rowIndex];
     const gameId = rowData.id;
     Swal.fire({
-      title: '¿Estás seguro de cambiar el estado del juego?',
+      title: 'Are you sure to change the state of the game?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Si, lo estoy',
-      cancelButtonText: 'No, lo estoy',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
@@ -121,17 +147,17 @@ export const TableDb = () => {
         setGameBlocked(true);
 
         Swal.fire({
-          title: '¡Juego bloqueado!',
+          title: 'The state of the game has been changed!',
           icon: 'success',
-          text: 'El juego ha sido bloqueado exitosamente.',
+          text: 'The action has been carried out successfully!',
         }).then(() => {
           setGameBlocked(false);
         })
       } else {
         Swal.fire({
-          title: 'Acción cancelada',
+          title: 'Action cancelled!',
           icon: 'info',
-          text: 'No se realizó ningún bloqueo de juego.',
+          text: 'No action was taken!',
         });
       }
     });
@@ -149,6 +175,27 @@ export const TableDb = () => {
   
   const closeEditDialog = () => {
     setEditDialogOpen(false);
+  };
+
+  const closeEditDialog01 = () => {
+    Swal.fire({
+      title: 'Are you sure to cancel the changes?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'continue editing',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        closeEditDialog()
+        setEditDialogOpen01(false);
+        Swal.fire({
+          title: 'Action cancelled!',
+          icon: 'info',
+          text: 'No action was taken!',
+        })
+      }
+    });
   };
 
   const handleIsFreeChange = () => {
@@ -254,7 +301,7 @@ export const TableDb = () => {
         const formDataHeader = new FormData();
         formDataHeader.append('file', selectedHeaderImage);
         const responseHeader = await axios.put(
-          `https://back-gamezone-production.up.railway.app/uploadHeader/${editingGameId}`,
+          `http://localhost:3001/uploadHeader/${editingGameId}`,
           formDataHeader,
           {
             headers: {
@@ -277,7 +324,7 @@ export const TableDb = () => {
         formDataCapsule.append('file', selectedCapsuleImage);
 
         const responseCapsule = await axios.put(
-          `https://back-gamezone-production.up.railway.app/uploadCapsule/${editingGameId}`,
+          `http://localhost:3001/uploadCapsule/${editingGameId}`,
           formDataCapsule,
           {
             headers: {
@@ -309,7 +356,6 @@ export const TableDb = () => {
     setSelectedCapsuleImage(null);
   }; 
   
-  console.log(idGamesAdmin)
   const handleSaveClick = () => {
     const developers = developersInput.split(',').map((dev) => dev.trim());
     const languages = languaguesInput.split(',').map((dev) => dev.trim());
@@ -339,10 +385,40 @@ export const TableDb = () => {
       header_image: header ? header : idGamesAdmin.header_image,
       capsule_image: capsule ? capsule : idGamesAdmin.capsule_image,
     };
-    // console.log(gameData)
-    dispatch(act.editGamesAdmin(editingGameId, gameData));
-    closeEditDialog();
+
+    // dispatch(act.editGamesAdmin(editingGameId, gameData));
+    // closeEditDialog();
+
+    Swal.fire({
+      title: 'Are you sure to save the changes?',
+      text: 'This action will save the changes made to the game.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Save Changes',
+      cancelButtonText: 'continue editing',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(act.editGamesAdmin(editingGameId, gameData));
+        setGameEdit(true)
+        closeEditDialog();
+        Swal.fire({
+          title: 'Changes saved',
+          icon: 'success',
+          text: 'The changes have been successfully saved.',
+        }).then(() => {
+          closeEditDialog();
+          setGameEdit(false)
+        });
+      }
+    });
   };
+
+  useEffect(() => {
+    if (isGameEdit) {
+      dispatch(act.allGamesAdmin());
+    }
+  }, [isGameEdit, dispatch]);
 
   const data = AllGamesAdmin;
 
@@ -352,6 +428,12 @@ export const TableDb = () => {
       label: "ID",
       options: {
         filter: false,
+        customHeadRender: () => (
+          <TableCell align="center">ID</TableCell>
+        ),
+        customBodyRender: (value) => (
+          <TableCell align="center">{value}</TableCell>
+        ),
       },
     },
     {
@@ -381,17 +463,24 @@ export const TableDb = () => {
             return true;
           },
         },
+        customHeadRender: () => (
+          <TableCell align="center">NAME</TableCell>
+        ),
         customBodyRender: (value, tableMeta, updateValue) => {
           if (value && value.length > 0) {
             return (
+              <div style={{ textAlign: 'center' }}>
               <Button onClick={() => {
                 handleInfo(tableMeta.rowIndex);
               }}>
                 {value}
               </Button>
+              </div>
             );
           } else {
-            return "No game info";
+            <div style={{ textAlign: 'center' }}>
+            No game info
+            </div>
           }
         },
       },
@@ -400,6 +489,9 @@ export const TableDb = () => {
       name: "Developers",
       label: "DEVELOPERS",
       options: {
+        customHeadRender: () => (
+          <TableCell align="center">DEVELOPERS</TableCell>
+        ),
         customBodyRender: (value, tableMeta, updateValue) => {
           if (value && value.length > 0) {
             const developers = value.map((dev) => dev.developer).join(", ");
@@ -469,8 +561,15 @@ export const TableDb = () => {
           const activeFilters = filterList[filterPos];
           return filters.map((name) => !activeFilters.includes(name));
         },
+        customHeadRender: () => (
+          <TableCell align="center">PRICE</TableCell>
+        ),
         customBodyRender: (value) => {
-          return value; 
+          return (
+            <div style={{ textAlign: 'center' }}>
+              {value}
+            </div>
+          );
         },
       },
     },
@@ -478,6 +577,9 @@ export const TableDb = () => {
       name: "ban",
       label: "GAMES STATUS",
       options: {
+        customHeadRender: () => (
+          <TableCell align="center">GAMES STATUS</TableCell>
+        ),
         customBodyRender: (value) => {
           return value ? "Banned" : "Active";
         },
@@ -486,9 +588,12 @@ export const TableDb = () => {
     {
       name: "Actions",
       options: {
+        customHeadRender: () => (
+          <TableCell align="center">ACTIONS</TableCell>
+        ),
         customBodyRender: (dataIndex, tableMeta, rowIndex) => {
           return (
-            <div>
+            <div style={{ textAlign: 'center' }}>
               <IconButton onClick={() => handleEdit(tableMeta.rowIndex)}>
                 <EditIcon />
               </IconButton>
@@ -515,25 +620,20 @@ export const TableDb = () => {
     responsive: "vertical",
   };
 
-  useEffect(() => {
-    if (!deleteDialogOpen) {
-      dispatch(act.allGamesAdmin());
-    }
-  }, [deleteDialogOpen, dispatch]);
-
-
   return (
-    <div className= {style.total} >
-    
-      <MUIDataTable
 
+    <div className= {style.total} >
+      <MUIDataTable
         title={"ALL GAMES"}
         data={AllGamesAdmin}
         columns={columns}
         options={options}
       />
 
-<Dialog open={editDialogOpen} onClose={closeEditDialog}>
+<Dialog open={editDialogOpen} onClose={() => {
+  closeEditDialog();
+  closeEditDialog01();
+}} style={{ zIndex: 0 }}>
   <DialogTitle>Edit Game</DialogTitle>
   <DialogContent><br />
     <TextField
@@ -602,7 +702,6 @@ export const TableDb = () => {
     <div>
       <label>
       <Checkbox
-          //type="checkbox"
           value="windows"
           onChange={handlePlatformChange}
           checked={selectedPlatforms.includes("windows")}
@@ -612,7 +711,6 @@ export const TableDb = () => {
       <br />
       <label>
       <Checkbox
-          //type="checkbox"
           value="mac"
           onChange={handlePlatformChange}
           checked={selectedPlatforms.includes("mac")}
@@ -622,7 +720,6 @@ export const TableDb = () => {
       <br />
       <label>
       <Checkbox
-          //type="checkbox"
           value="linux"
           onChange={handlePlatformChange}
           checked={selectedPlatforms.includes("linux")}
@@ -721,124 +818,116 @@ export const TableDb = () => {
     </form>
   </DialogContent>
   <DialogActions>
-    <Button onClick={closeEditDialog}>Cancel</Button>
+    <Button onClick={closeEditDialog01}>Cancel</Button>
     <Button onClick={handleSaveClick}>Save</Button>
   </DialogActions>
 </Dialog>
 
-
-      <Dialog open={deleteDialogOpen} onClose={cancelDelete}>
-        <DialogTitle>Are you about to delete the {data[deleteRowIndex]?.name} game with ID {data[deleteRowIndex]?.id} are you sure?</DialogTitle>
-        <DialogActions>
-          <Button onClick={cancelDelete}>No, I'm not</Button>
-          <Button onClick={confirmDelete}>I'm sure</Button>
-        </DialogActions>
-      </Dialog>
       <Dialog open={showGameInfo} onClose={() => setShowGameInfo(false)}>
         <DialogTitle>Game Information</DialogTitle>
-        <DialogContent>
-          ID: <br />
+        <DialogContent style={{ textAlign: 'center' }}>
+          <div style={{ fontWeight: "bold" }}>ID:</div>
           {idGamesAdmin.id !== undefined && idGamesAdmin.id !== null
           ? idGamesAdmin.id
           : "No id to display"} <br /><br />
 
-          NAME: <br />
+          <div style={{ fontWeight: "bold" }}>NAME:</div>
           {idGamesAdmin.name !== undefined && idGamesAdmin.name !== null
           ? idGamesAdmin.name
           : "No display name"}<br /><br />
 
+          
           {idGamesAdmin.header_image !== undefined && idGamesAdmin.header_image !== null
-          ? <img src={idGamesAdmin.header_image} alt="Game Header" />
+          ? <img src={idGamesAdmin.header_image} alt="Game Header" style={{ width: "400px", height: "200px", borderRadius: "10%" }}/>
           : "NO PICTURE TO SHOW"}<br /><br />
-
-          TYPE: <br /> 
+          
+          <div style={{ fontWeight: "bold" }}>TYPE:</div>
           {idGamesAdmin.type !== undefined && idGamesAdmin.type !== null
           ? idGamesAdmin.type
           : "There is no type to show"}<br /><br />
 
-          REQUIRED AGE: <br />
+          <div style={{ fontWeight: "bold" }}>REQUIRED AGE:</div>
           {idGamesAdmin.required_age}<br /><br />
 
-          IS FREE: <br /> 
+          <div style={{ fontWeight: "bold" }}>IS FREE:</div>
           {idGamesAdmin.is_free ? "true" : "false"}<br /><br />
 
-          DETAILED DESCRIPTION: <br />
+          <div style={{ fontWeight: "bold" }}>DETAILED DESCRIPTION:</div>
           {idGamesAdmin.detailed_description 
           && idGamesAdmin.detailed_description
           ? idGamesAdmin.detailed_description.replace(/<(?:.|\n)*?>/gm, "") 
           : "No description to show"}<br /><br />
 
-          CONTROLLER SUPPORT: <br />
+          <div style={{ fontWeight: "bold" }}>CONTROLLER SUPPORT:</div>
           {idGamesAdmin.controller_support !== null
           ? idGamesAdmin.controller_support
           : "No support information to display"}<br /><br />
 
-          RELEASE DATE: <br />
+          <div style={{ fontWeight: "bold" }}>RELEASE DATE:</div>
           {idGamesAdmin.release_date !== undefined && idGamesAdmin.release_date !== null
           ? idGamesAdmin.release_date
           : "There is no release date"}<br /><br />
 
-          COMING SOON: <br />
+          <div style={{ fontWeight: "bold" }}>COMING SOON:</div>
           {idGamesAdmin.coming_soon ? "true" : "false"}<br /><br />
 
-          PRICE: <br />
+          <div style={{ fontWeight: "bold" }}>PRICE:</div>
           {idGamesAdmin.price_overview}<br /><br />
 
-          PC REQ. MIN: <br />
+          <div style={{ fontWeight: "bold" }}>PC REQ. MIN:</div>
           {idGamesAdmin.pc_requirements 
           && idGamesAdmin.pc_requirements.minimum 
           ? idGamesAdmin.pc_requirements.minimum.replace(/<(?:.|\n)*?>/gm, '').replace("Minimum:", "") 
           : 'No minimum requirements available.'}<br /><br />
 
-          PC REQ. RECOM: <br />
+          <div style={{ fontWeight: "bold" }}>PC REQ. RECOM:</div>
           {idGamesAdmin.pc_requirements
           && idGamesAdmin.pc_requirements.recommended
           ? idGamesAdmin.pc_requirements.recommended.replace(/<(?:.|\n)*?>/gm, '').replace("Recommended:", "")
           : 'No recommended requirements available.'}<br /><br />
 
-          CATEGORIES: <br/>
+          <div style={{ fontWeight: "bold" }}>CATEGORIES:</div>
           {Array.isArray(idGamesAdmin.Categories) && idGamesAdmin.Categories.length > 0 ? (
             idGamesAdmin.Categories.map((categoryObj) => categoryObj.category).join(', ')
           ) : (
             'There are no categories to display.'
           )}<br /><br />
 
-
-          DEVELOPERS: <br/>
+          <div style={{ fontWeight: "bold" }}>DEVELOPERS:</div>
           {Array.isArray(idGamesAdmin.Developers) && idGamesAdmin.Developers.length > 0 ? (
             idGamesAdmin.Developers.map((categoryObj) => categoryObj.developer).join(', ')
           ) : (
             'There are no developer to display.'
           )}<br /><br />
 
-          GENRES: <br/>
+          <div style={{ fontWeight: "bold" }}>GENRES:</div>
           {Array.isArray(idGamesAdmin.Genres) && idGamesAdmin.Genres.length > 0 ? (
             idGamesAdmin.Genres.map((categoryObj) => categoryObj.genre).join(', ')
           ) : (
             'There are no genre to display.'
           )}<br /><br />
 
-          LANGUAGES: <br/>
+          <div style={{ fontWeight: "bold" }}>LANGUAGES:</div>
           {Array.isArray(idGamesAdmin.Languages) && idGamesAdmin.Languages.length > 0 ? (
             idGamesAdmin.Languages.map((categoryObj) => categoryObj.language).join(', ')
           ) : (
             'There are no language to display.'
           )}<br /><br />
 
-          PLATFORMS: <br/>
+          <div style={{ fontWeight: "bold" }}>PLATFORMS:</div>
           {Array.isArray(idGamesAdmin.Platforms) && idGamesAdmin.Platforms.length > 0 ? (
             idGamesAdmin.Platforms.map((categoryObj) => categoryObj.platform).join(', ')
           ) : (
             'There are no platform to display.'
           )}<br /><br />
 
-          DISCOUNTED: <br />
+          <div style={{ fontWeight: "bold" }}>DISCOUNTED:</div>
           {idGamesAdmin.discounted ? "true" : "false"}<br /><br />
 
-          DISCOUNT PERCENT: <br />
+          <div style={{ fontWeight: "bold" }}>DISCOUNT PERCENT:</div>
           {`${idGamesAdmin.discount_percent}%`}<br /><br />
 
-          USER STATUS: <br />
+          <div style={{ fontWeight: "bold" }}>GAME STATUS:</div>
           {idGamesAdmin.ban ? "Banned" : "Active"}<br /><br />
 
         </DialogContent>
@@ -847,6 +936,5 @@ export const TableDb = () => {
         </DialogActions>
       </Dialog>
       </div>
-    
   );
 };

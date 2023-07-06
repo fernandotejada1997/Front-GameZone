@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePassword, setError } from "../../../redux/actions";
 import Swal from "sweetalert2";
+import styles from './change.module.css'
 
 const ChangePassword = () => {
 
@@ -114,41 +115,42 @@ const ChangePassword = () => {
     return (
         <div>
 
-            <h3 style={{"color" : "white"}} >
+            <h3 className={styles.change_password} >
                 Change Password
             </h3>
 
-            <p style={{"color" : "white"}}>
+            <p className={styles.text}>
                 We strongly recommend that, for your security, you choose a unique password that you do not use to connect to other accounts.
             </p>
 
-            <div>
+            <div className={styles.Form}>
 
                 <form onSubmit={(e) => handleOnSubmit(e)} >
 
                     {
                         datosUser.password  ? (
                             <div>
-                                <label style={{"color" : "white"}} > CurrenPassword </label>
-                                <input style={{ "borderColor": errorCurrentPassword ? "red" : "" }} type="password" value={currentPassword} onChange={ (e) => inputChangeCurrenPassword(e)} />
-                                {errorCurrentPassword && <div style={{"color" : "red"}}>{errorCurrentPassword}</div>}
+                                <label> CurrenPassword </label>
+                                <input type="password" value={currentPassword} onChange={ (e) => inputChangeCurrenPassword(e)} />
+                                {errorCurrentPassword && <div className={styles.error}>{errorCurrentPassword}</div>}
                             </div>
                         ) : (
                             <>
                             </>
                         )
                     }
-
-                    <label style={{"color" : "white"}} > New Password </label>
-                    <input style={{ "borderColor": errorNewPassword ? "red" : "" }} type="password" value={newPassword} onChange={(e) => inputChangeNewPassword(e)} />
-                    {errorNewPassword && <div style={{"color" : "red"}}>{errorNewPassword}</div> }
-
-                    <label style={{"color" : "white"}} > Confirm New Password </label>
-                    <input style={{ "borderColor": errorConfirmPassword ? "red" : "" }} type="password" value={confirmNewPassword} onChange={(e) => inputChangeConfirmPassword(e)} />
-                    {errorConfirmPassword && <div style={{"color" : "red"}}>{errorConfirmPassword}</div>}
+                <div className={styles.input_group}>
+                    <label> New Password </label>
+                    <input className={styles.error} type="password" value={newPassword} onChange={(e) => inputChangeNewPassword(e)} />
+                    {errorNewPassword && <div className={styles.erro} >{errorNewPassword}</div> }
+                    <br/>
+                    <label> Confirm New Password </label>
+                    <input type="password" value={confirmNewPassword} onChange={(e) => inputChangeConfirmPassword(e)} />
+                    {errorConfirmPassword && <div className={styles.erro}>{errorConfirmPassword}</div>}
                     
-                    <button>
-                        Guradar Cambios
+                    </div>
+                    <button className={styles.button}>
+                        Save
                     </button>
 
                 </form>
