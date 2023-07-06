@@ -3,8 +3,10 @@ import styles from "./WhishList.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/Card/Card";
 import * as act from "../../redux/actions";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const WhishList = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const list = useSelector((state) => state.whishList);
   const counter = useSelector((state) => state.counter);
@@ -23,11 +25,21 @@ const WhishList = () => {
     }
   });
 
+  const handleBack = () => {
+    history.goBack();
+  };
+
   return (
-    <div>
-      <br />
-      <h2 className={styles.titleCarrito}>WhishList</h2>
-      <div className={styles.titleCarrito}>{counter}</div>
+    <div className={styles.container1}>
+      <div className={styles.buttonba}>
+        <button
+          className={`fa fa-arrow-circle-left ${styles["backButton"]}`}
+          onClick={() => handleBack()}
+        ></button>
+        </div>
+      <div className={styles.titleCarrito}>
+        {counter}
+      </div>
       <br />
       {list.length === 0 ? (
         <div className={styles.container}>

@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 const MyGames = () => {
   const history = useHistory();
   const games = useSelector((state) => state.library);
-  console.log(games);
+  //console.log(games);
   const dataUser = JSON.parse(localStorage.getItem("user"));
   const ids = dataUser.id;
   const user = dataUser.name;
@@ -19,8 +19,8 @@ const MyGames = () => {
   }, [ids]);
 
   const handleSend = (game) => {
-    const hasReviewed = game.Reviews.some((r) => r.Users[0].name === user);
-    console.log(hasReviewed);
+    const hasReviewed = game.Reviews.some((r) => r.Users[0]?.name === user);
+    //console.log(hasReviewed);
     if (hasReviewed) {
       Swal.fire({
         position: "center",
@@ -31,14 +31,14 @@ const MyGames = () => {
       });
       return;
     } else {
-      dispatch(act.mandarAReview(game));
       history.push("/review");
+      dispatch(act.mandarAReview(game));
     }
   };
 
   const handleEdit = (game) => {
     const gameEdit = game;
-    console.log(gameEdit);
+    //console.log(gameEdit);
     if (gameEdit.Reviews.length === 0) {
       Swal.fire({
         position: "center",
@@ -50,7 +50,7 @@ const MyGames = () => {
       return;
     } else {
       for (let i = 0; i < gameEdit.Reviews.length; i++) {
-        let userEdit = gameEdit.Reviews[i]?.Users[0].name;
+        let userEdit = gameEdit.Reviews[i]?.Users[0]?.name;
         if (userEdit === user) {
           const review = gameEdit.Reviews[i]?.reviews;
           const rating = gameEdit.Reviews[i]?.rating;
@@ -67,26 +67,37 @@ const MyGames = () => {
     const gameDelete = game;
     if (gameDelete) {
       for (let i = 0; i < gameDelete.Reviews.length; i++) {
-        let userD = gameDelete.Reviews[i]?.Users[0].name;
+        let userD = gameDelete.Reviews[i]?.Users[0]?.name;
         if (userD === user) {
           let idD = gameDelete.Reviews[i]?.id;
           dispatch(act.getDeleteReview(idD));
         }
       }
-    }else{
-    Swal.fire({
-      position: "center",
-      icon: "question",
-      title: "No reviews added",
-      showConfirmButton: false,
-      timer: 2000,
-    });
-    return;
-  }}
+      Swal.fire({
+        position: "center",
+        icon: "question",
+        title: "No reviews added",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      return;
+    }
+  };
+
+  const handleBack = () => {
+    history.goBack();
+  };
+
   return (
     <div className={style.container}>
+      <button
+        className={`fa fa-arrow-circle-left ${style["backButton"]}`}
+        onClick={() => handleBack()}
+      ></button>
       <div className={style.cardContainer}>
-        {games &&
+        {!games.length ? (
+          <h2 className={style.title}>The library is empty...</h2>
+        ) : (
           games.map((game) => (
             <div className={style.card} key={game.id}>
               <Link to={`detail/${game.id}`}>
@@ -101,13 +112,17 @@ const MyGames = () => {
               <div className={style.buttons}>
                 <button
                   className={style.buttonNew}
-                  onClick={() => {handleSend(game)}}
+                  onClick={() => {
+                    handleSend(game);
+                  }}
                 >
                   New Review
                 </button>
                 <button
                   className={style.buttonEdit}
-                  onClick={() => {handleEdit(game)}}
+                  onClick={() => {
+                    handleEdit(game);
+                  }}
                 >
                   Edit Review
                 </button>
@@ -119,7 +134,8 @@ const MyGames = () => {
                 </button>
               </div>
             </div>
-          ))}
+          ))
+        )}
       </div>
       <div className={style}></div>
     </div>

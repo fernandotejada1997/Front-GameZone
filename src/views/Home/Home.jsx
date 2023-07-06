@@ -122,10 +122,7 @@ import { PacmanLoader } from "react-spinners";
 const Home = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const gameOffer = useSelector((state) => state.gameOffer);
   const search = useSelector((state) => state.search);
-  const gamesNewReleases = useSelector((state) => state.gamesNewReleases);
-  const gamesTopSellers = useSelector((state) => state.gamesTopSellers);
   const games = useSelector((state) => state.games);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true); // Estado para controlar la carga
@@ -176,7 +173,7 @@ useEffect(() => {
   };
 
   // Verificar si el array de juegos tiene al menos 14 elementos
-  const selectedGames = games.length >= 18 ? games.slice(0, 18) : games;
+  const selectedGames = games.length >= 18 ? games.slice(0, 12) : games;
   const frees = games.filter(
     (game) => game.is_free === true && game.price_overview >= 0
   );
@@ -187,9 +184,9 @@ useEffect(() => {
     (game) => game.controller_support === "full"
   );
 
-  const frees2 = frees.slice(0, 12);
-  const type2 = type.slice(0, 12);
-  const controllerSupport2 = controllerSupport.slice(0, 12);
+  const frees2 = frees.slice(0, 6);
+  const type2 = type.slice(0, 6);
+  const controllerSupport2 = controllerSupport.slice(0, 6);
 
     if (loading) {
       return (

@@ -182,6 +182,7 @@
 
 .submenu_item a {
     color: #333;
+    cursor:pointer;
     text-decoration: none;
 }
 
@@ -196,7 +197,7 @@
 }
 .submenu>li {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     font-size: 17px;
     margin: 10px;

@@ -92,10 +92,10 @@
 
 .botonBorrar {
   color: white;
-  width: 50%;
+  width: 135px;
   background-color: red;
   border: none;
-  padding: 5px 10px;
+  padding: 8px 16px;
   border-radius: 10px;
   cursor: pointer;
 }

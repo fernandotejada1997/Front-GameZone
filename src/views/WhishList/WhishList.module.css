@@ -1,23 +1,42 @@
 .titleCarrito {
     color: white;
   }
-
-.container{
+  
+  .container {
     min-height: 100vh;
     display: flex;
     justify-content: space-around;
-}
-
-.juegosContainer{
-    margin: 10px ;
+  }
+  
+  .backButton {
+    /* outline: red solid 3px; */
+    display: flex;
+    width: 4%;
+    height: 20%;
+    background-color: transparent;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: none;
+    margin-top: 10px;
+    margin-bottom: 0%;
+    font-weight: bold;
+    font-size: 40px;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .juegosContainer {
+    margin: 10px;
     display: flex;
     border-radius: 10px;
     width: 50%;
     justify-content: space-around;
-    background-color: #2E2E2E;
-}
-
-.cajitaItems {
+    background-color: #2e2e2e;
+  }
+  
+  .cajitaItems {
     display: flex;
     background-color: #202020;
     margin: 10px 0;
@@ -29,14 +48,18 @@
     box-sizing: border-box;
     list-style-type: none;
     padding: 0;
-}
-
-.li{
+  }
+  
+  .li {
     margin: 10px 0;
-}
-
-.emptyCart {
+  }
+  
+  .emptyCart {
     padding: 20px;
     border-radius: 4px;
     color: white;
+  }
+
+  .buttonba{
+    margin-right: 1000px;
   }
