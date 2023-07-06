@@ -69,12 +69,12 @@ const Home = () => {
   const type2 = type.slice(0, 12);
   const controllerSupport2 = controllerSupport.slice(0, 12);
 
-            if (loading) {
-              return (
-              <div className={style.loading}>
-                <PacmanLoader color="blue" size={80} speedMultiplier={1} />
-              </div>// Muestra el mensaje de carga mientras loadinges true
-            )}
+    if (loading) {
+      return (
+      <div className={style.loading}>
+        <PacmanLoader color="blue" size={80} speedMultiplier={1} />
+      </div>// Muestra el mensaje de carga mientras loadinges true
+    )}
 
   return (
     <div className={style.homeContainer}>
