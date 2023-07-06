@@ -361,14 +361,14 @@ function Dashboard() {
                 </span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <a href="#" onClick={handleCreateGameClick}>
                 <i className={`fa fa-cogs ${styles["fa-2x"]}`}></i>
                 <span className={styles.nav_text}>
                   Create Game
                 </span>
               </a>
-            </li>
+            </li> */}
             <li>
               <a href="#" onClick={handleCreateUserClick}>
                 <i className={`fa fa-user ${styles["fa-2x"]}`}></i>
