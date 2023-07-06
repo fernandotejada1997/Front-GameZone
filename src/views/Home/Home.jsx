@@ -73,7 +73,7 @@ const Home = () => {
               return (
               <div className={style.loading}>
                 <PacmanLoader color="blue" size={80} speedMultiplier={1} />
-              </div>// Muestra el mensaje de carga mientras loading es true
+              </div>// Muestra el mensaje de carga mientras loadinges true
             )}
 
   return (
