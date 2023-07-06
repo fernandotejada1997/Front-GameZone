@@ -24,7 +24,9 @@ const Detail = (props) => {
 
 
   useEffect(() => {
+    
     if (id) {
+      window.scrollTo(0, 0);
       dispatch(gameDetail(id))
       .then(() => {
         const video = game?.Videos || "";

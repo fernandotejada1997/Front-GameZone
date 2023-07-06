@@ -301,7 +301,7 @@ export const TableDb = () => {
         const formDataHeader = new FormData();
         formDataHeader.append('file', selectedHeaderImage);
         const responseHeader = await axios.put(
-          `http://localhost:3001/uploadHeader/${editingGameId}`,
+          `https://back-gamezone-production.up.railway.app/uploadHeader/${editingGameId}`,
           formDataHeader,
           {
             headers: {
@@ -324,7 +324,7 @@ export const TableDb = () => {
         formDataCapsule.append('file', selectedCapsuleImage);
 
         const responseCapsule = await axios.put(
-          `http://localhost:3001/uploadCapsule/${editingGameId}`,
+          `https://back-gamezone-production.up.railway.app/uploadCapsule/${editingGameId}`,
           formDataCapsule,
           {
             headers: {

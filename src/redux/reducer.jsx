@@ -649,6 +649,11 @@ case act.SET_TOTALPRICE:
                 ...state,
                 review: action.payload,
             };
+            case act.SET_GAMES:
+            return {
+                ...state,
+                games: action.payload,
+            }
             
         default:
             return {...state};

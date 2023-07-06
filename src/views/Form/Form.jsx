@@ -727,6 +727,7 @@ const Form = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (error) {
         Swal.fire('Ups!', `${error}`, 'error').then(() => {
           dispatch(setError(null)); // Limpiar el error después de mostrarlo

@@ -64,6 +64,7 @@ export const DELETEDATAUSER = "CLEANDATAUSER";
 export const SET_USERS = "SET_USERS";
 export const DELETE_USER = "DELETE_USER";
 export const BAN_USER = "BAN_USER";
+export const SET_GAMES = "SET_GAMES";
 
 //adm
 export const allGamesAdmin = () => {
@@ -368,23 +369,58 @@ export const filterfree = (payload) => {
             payload: payload
     }
 }
-export const getGames = () => {
+// export const getGames = () => {
     
+//     return async function (dispatch) {
+//         try {
+//             console.log("esto es all games")
+//             const response = await axios.get(`allGames`)
+//             console.log(response);
+//             const game = response.data
+//             dispatch({
+//                 type: GET_GAMES,
+//                 payload: game
+//             })
+//         } catch (error) {
+//             console.log(error.message);            
+//         }
+//     }
+// }
+    //GAMES
+export const getGames = () => {
     return async function (dispatch) {
-        try {
-            console.log("esto es all games")
-            const response = await axios.get(`allGames`)
-            console.log(response);
-            const game = response.data
-            dispatch({
-                type: GET_GAMES,
-                payload: game
-            })
-        } catch (error) {
-            console.log(error.message);            
+      try {
+        const response = await axios.get(`allGames`);
+        const games = response.data;
+  
+        dispatch({
+          type: GET_GAMES,
+          payload: games,
+        });
+  
+        localStorage.setItem("games", JSON.stringify(games)); // Guardar los juegos en el almacenamiento local
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+  };
+  export const setGames = () => {
+    return function (dispatch) {
+      try {
+        const storedGames = localStorage.getItem("games");
+  
+        if (storedGames) {
+          const games = JSON.parse(storedGames);
+         return dispatch({
+            type: SET_GAMES,
+            payload: games,
+          });
         }
-    }
-}
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+  };
 
 export const gameDetail = (id) => {
     return async function (dispatch) {
@@ -414,21 +450,38 @@ export const gameDetail = (id) => {
 // };
 
 export const getByName = (name) => {
-    return async function(dispatch) {
+    return async function(dispatch, getState) {
     try {
-        const response = await axios.get(`nameGames?name=${name}`);
-
-        const sortedResponse = response.data
-
+        const storedGames = await JSON.parse(localStorage.getItem("games"));
+        const filteredResults = storedGames.filter((game) =>
+        game.name.toLowerCase().includes(name.toLowerCase()))
+        // const lol = getState().games
+        // localStorage.setItem(`games`, JSON.stringify(lol))
         dispatch({
             type: GET_BY_NAME,
-            payload: sortedResponse
+            payload: filteredResults
         });
         } catch (error) {
             console.log(error.message);
         }
     };
 };
+// export const getByName = (name) => {
+//     return async function(dispatch) {
+//     try {
+//         const response = await axios.get(`nameGames?name=${name}`);
+
+//         const sortedResponse = response.data
+
+//         dispatch({
+//             type: GET_BY_NAME,
+//             payload: sortedResponse
+//         });
+//         } catch (error) {
+//             console.log(error.message);
+//         }
+//     };
+// };
 
 
 export const clearDetail = () => {
