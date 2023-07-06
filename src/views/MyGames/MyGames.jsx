@@ -101,15 +101,13 @@ const MyGames = () => {
               <div className={style.buttons}>
                 <button
                   className={style.buttonNew}
-                  onClick={() => handleSend(game)}
+                  onClick={() => {handleSend(game)}}
                 >
                   New Review
                 </button>
                 <button
                   className={style.buttonEdit}
-                  onClick={() => {
-                    handleEdit(game);
-                  }}
+                  onClick={() => {handleEdit(game)}}
                 >
                   Edit Review
                 </button>

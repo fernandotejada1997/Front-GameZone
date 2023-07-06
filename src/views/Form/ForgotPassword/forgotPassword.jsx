@@ -4,88 +4,81 @@ import { submitEmail, setError } from "../../../redux/actions";
 import Swal from "sweetalert2";
 
 const ForgotPassword = () => {
+  const error = useSelector((state) => state.errorBack);
 
-    const error = useSelector((state) => state.errorBack)
+  console.log(error);
 
-    console.log(error)
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
+  const [email, setEmail] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
 
-    const [ email, setEmail ] = useState("")
-    const [ errorEmail, setErrorEmail ] = useState("")
+  const emailPattern = RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
-    const emailPattern = RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
-
-    const validateEmailError = () => {
-        if (!email) {
-          return 'Mail is required';
-        }
-        if (!emailPattern.test(email)) {
-          return 'The email is invalid';
-        }
-        return '';
-      }
-
-    const validateEmail = (e) => {
-        setEmail(e.target.value)
+  const validateEmailError = () => {
+    if (!email) {
+      return "Mail is required";
     }
-
-    const onSubmitEmail = async (e) => {
-        e.preventDefault()
-
-        const emailError = validateEmailError()
-        setErrorEmail(emailError)
-
-        if (emailError) {
-            return; // Detener la ejecución si hay errores de validación
-        }else{
-            await dispatch(submitEmail(email))
-
-            Swal.fire('Good job!', 'Email sent successfully!', 'success');
-
-            //if (error) {
-            //    return await Swal.fire(
-            //        'Ups!',
-            //        `${error}`,
-            //        'error'
-            //    )
-            //}else{
-            //    await Swal.fire(
-            //        'Good job!',
-            //        'Email sent successfully!',
-            //        'success'
-            //    )
-            //}
-        }
+    if (!emailPattern.test(email)) {
+      return "The email is invalid";
     }
+    return "";
+  };
 
-    useEffect(() => {
-        if (error) {
-            Swal.fire('Ups!', `${error}`, 'error').then(() => {
-              dispatch(setError(null)); // Limpiar el error después de mostrarlo
-            });
-        }
-    }, [error, dispatch])
+  const validateEmail = (e) => {
+    setEmail(e.target.value);
+  };
 
-    return(
-        <div>
+  const onSubmitEmail = async (e) => {
+    e.preventDefault();
 
-            <h2 style={{"color" : "white"}} >Recover your Account</h2>
+    const emailError = validateEmailError();
+    setErrorEmail(emailError);
 
-            <form onSubmit={(e) => onSubmitEmail(e)}>
+    if (emailError) {
+      return; // Detener la ejecución si hay errores de validación
+    } else {
+      await dispatch(submitEmail(email));
 
-                <label style={{"color" : "white"}} >Email</label>
-                <input type="text" value={email} onChange={(e) => validateEmail(e)} />
-                {errorEmail && <div style={{"color" : "red"}}>{errorEmail}</div>}
+      Swal.fire("Good job!", "Email sent successfully!", "success");
 
-                <button>
-                    submit
-                </button>
+      //if (error) {
+      //    return await Swal.fire(
+      //        'Ups!',
+      //        `${error}`,
+      //        'error'
+      //    )
+      //}else{
+      //    await Swal.fire(
+      //        'Good job!',
+      //        'Email sent successfully!',
+      //        'success'
+      //    )
+      //}
+    }
+  };
 
-            </form>
+  useEffect(() => {
+    if (error) {
+      Swal.fire("Ups!", `${error}`, "error").then(() => {
+        dispatch(setError(null)); // Limpiar el error después de mostrarlo
+      });
+    }
+  }, [error, dispatch]);
 
-        </div>
-    )
-}
+  return (
+    <div>
+      <h2 style={{ color: "white" }}>Recover your Account</h2>
 
-export default ForgotPassword
+      <form onSubmit={(e) => onSubmitEmail(e)}>
+        <label style={{ color: "white" }}>Email</label>
+        <input type="text" value={email} onChange={(e) => validateEmail(e)} />
+        {errorEmail && <div style={{ color: "red" }}>{errorEmail}</div>}
+
+        <button>submit</button>
+      </form>
+    </div>
+  );
+};
+
+export default ForgotPassword;

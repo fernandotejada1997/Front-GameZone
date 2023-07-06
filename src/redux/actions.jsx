@@ -746,41 +746,78 @@ export const setCounter = (c) => {
 
 //? Action de Create User
 
+// export const postCreateUser = (props) => {
+//     return async function (dispatch) {
+//         try {
+//            const user = await axios.post("crearCuenta",props)
+//            console.log(user.props)
+//             return dispatch({
+//                 type : CREATE_USER,
+//                 payload : user.props
+//             })
+//         } catch (error) {
+//             console.log(error)
+//         }
+//     }
+// }
 export const postCreateUser = (props) => {
     return async function (dispatch) {
-        try {
-           const user = await axios.post("crearCuenta",props)
-           console.log(user.props)
-            return dispatch({
-                type : CREATE_USER,
-                payload : user.props
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-}
+      try {
+        const user = await axios.post("/crearCuenta", props);
+        console.log(user.data);
+        return dispatch({
+          type: CREATE_USER,
+          payload: user.props,
+        });
+      } catch (error) {
+        console.log(error);
+        return dispatch({
+          type: ERROR,
+          payload: error.response.data,
+        });
+      }
+    };
+  };
 
 //? Accion de Loguear Usuario
 
-export const postLogin = (datos) =>{
+// export const postLogin = (datos) =>{
+//     return async function (dispatch) {
+//         try {
+//             const userTwo = await axios.post("iniciarSesion",datos)
+//             console.log(userTwo.data, "estos son de las actions")
+//             return dispatch({
+//                 type : LOGIN_USER,
+//                 payload : userTwo.data
+//             })
+//         } catch (error) {
+//             console.log(error?.response?.data)
+//             //return dispatch({
+//             //    type : LOGIN_USER,
+//             //    payload : error.response.data
+//             //})
+//         }
+//     }
+// }
+
+export const postLogin = (datos) => {
     return async function (dispatch) {
-        try {
-            const userTwo = await axios.post("iniciarSesion",datos)
-            console.log(userTwo.data, "estos son de las actions")
-            return dispatch({
-                type : LOGIN_USER,
-                payload : userTwo.data
-            })
-        } catch (error) {
-            console.log(error?.response?.data)
-            //return dispatch({
-            //    type : LOGIN_USER,
-            //    payload : error.response.data
-            //})
-        }
-    }
-}
+      try {
+        const userTwo = await axios.post("iniciarSesion", datos);
+        console.log(userTwo.data, "estos son de las actions");
+        return dispatch({
+          type: LOGIN_USER,
+          payload: userTwo.data,
+        });
+      } catch (error) {
+        console.log(error?.response?.data);
+        return dispatch({
+          type: ERROR,
+          payload: error.response.data,
+        });
+      }
+    };
+  };
 
 //? Action de Logout Usuario
 

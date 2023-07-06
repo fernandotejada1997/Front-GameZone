@@ -140,16 +140,16 @@ const NavBar = () => {
                     <li>
                         <div className={style.usuarioContainer}>
                             <img
-                                src={datosUser.profileImage}
+                                src={datosUser?.profileImage}
                                 className={style.usuario}
-                                alt={datosUser.name}
-                                title={datosUser.name}
+                                alt={datosUser?.name}
+                                title={datosUser?.name}
                                 onClick={handleSubMenuToggle}
                             />
                             {isSubMenuOpen && (
                                 <ul className={style.submenu}>
                                     <li className={style["submenu_item"]}>
-                                        <Link to="#">{datosUser.user_name}</Link>
+                                        <Link to="#">{datosUser?.user_name}</Link>
                                     </li>
                                     <li className={style["submenu_item"]}>
                                         <Link to="/user">Perfil</Link>
