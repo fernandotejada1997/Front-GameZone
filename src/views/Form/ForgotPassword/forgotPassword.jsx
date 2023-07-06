@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { submitEmail, setError } from "../../../redux/actions";
 import Swal from "sweetalert2";
+import style from "./forgotPassword.module.css"
 
 const ForgotPassword = () => {
   const error = useSelector((state) => state.errorBack);
@@ -67,15 +68,15 @@ const ForgotPassword = () => {
   }, [error, dispatch]);
 
   return (
-    <div>
-      <h2 style={{ color: "white" }}>Recover your Account</h2>
-
-      <form onSubmit={(e) => onSubmitEmail(e)}>
-        <label style={{ color: "white" }}>Email</label>
-        <input type="text" value={email} onChange={(e) => validateEmail(e)} />
+    <div className={style.container}>
+      <h2 className={style.change_password}>Recover your Account</h2>
+      <h4 style={{ color: "white" }}>Type your email to recovery your account</h4>
+      <form className={style.email} onSubmit={(e) => onSubmitEmail(e)}>
+        <label  style={{ color: "white" }}>Email</label>
+        <input className={style.mail} type="text" value={email} onChange={(e) => validateEmail(e)} />
         {errorEmail && <div style={{ color: "red" }}>{errorEmail}</div>}
 
-        <button>submit</button>
+        <button>Submit</button>
       </form>
     </div>
   );

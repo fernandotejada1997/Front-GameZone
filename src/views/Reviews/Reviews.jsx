@@ -55,6 +55,10 @@ const Review = () => {
           review: "",
           rating: 0,
         });
+        setTimeout(() => {
+          history.push(`/detail/${gameRe.id}`);
+          window.location.reload(); // Recargar la página
+        }, 200);
       })
       .catch(error => {
         console.error("Error submitting review:", error);

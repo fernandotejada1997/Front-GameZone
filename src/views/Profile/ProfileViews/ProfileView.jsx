@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import style from "./ProfileView.module.css";
 import * as act from "../../../redux/actions";
 import countries from "./countries";
 import ShoppingView from "./ShoppingView";
-import { save } from 'redux-localstorage-simple';
+import { save } from "redux-localstorage-simple";
+import Swal from "sweetalert2";
 
 const ProfileView = (props) => {
   const dispatch = useDispatch();
 
-  const [datosUser, setDatosUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [datosUser, setDatosUser] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
   const [editingName, setEditingName] = useState(false);
   const [editingUserName, setEditingUserName] = useState(false);
   const [editingCountry, setEditingCountry] = useState(false);
@@ -28,18 +31,18 @@ const ProfileView = (props) => {
   }, []);
 
   useEffect(() => {
-    const functionData = async () => {
-        try {
-            let info;
-            const data = await dispatch(act.getUserStorage(datosUser.id))
-            info = data.payload
-            localStorage.setItem("user", JSON.stringify(info));
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    functionData();
-}, [editingCountry, editingName, editingUserName])
+    const fetchData = async () => {
+      try {
+        let info;
+        const data = await dispatch(act.getUserStorage(datosUser.id));
+        info = data.payload;
+        localStorage.setItem("user", JSON.stringify(info));
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchData();
+  }, [editingName, editingUserName, editingCountry]);
 
   const handleEditNameClick = () => {
     setEditingName(true);
@@ -57,10 +60,9 @@ const ProfileView = (props) => {
   };
 
   const handleSaveClick = () => {
-    let updatedUser
+    let updatedUser = { ...datosUser };
     if (editingName) {
       dispatch(act.editName(datosUser?.id, newName));
-      console.log(newName);
       updatedUser = { ...datosUser, name: newName };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setDatosUser(updatedUser);
@@ -68,7 +70,6 @@ const ProfileView = (props) => {
     }
     if (editingUserName) {
       dispatch(act.editUserName(datosUser?.id, newUserName));
-      console.log(newUserName);
       updatedUser = { ...datosUser, user_name: newUserName };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setDatosUser(updatedUser);
@@ -76,15 +77,22 @@ const ProfileView = (props) => {
     }
     if (editingCountry) {
       dispatch(act.editCountry(datosUser?.id, newCountry));
-      console.log(newCountry);
       updatedUser = { ...datosUser, country: newCountry };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setDatosUser(updatedUser);
       setEditingCountry(false);
     }
     save({ user: updatedUser });
+    Swal.fire({
+      title:
+        "cambios guardados, se veran reflejados luego de su proximo inicio de sesion",
+      icon: "success",
+      position: "center",
+      showConfirmButton: false,
+      timer: 2000,
+    });
   };
-  
+
   const handleCancelClick = () => {
     setEditingName(false);
     setEditingUserName(false);
@@ -110,13 +118,19 @@ const ProfileView = (props) => {
     <div className={style.container}>
       <br />
       <h1 className={style.text}>Profile</h1>
-      <br /><br />
-      <img className={style.image} src={datosUser?.profileImage} alt="Profile" />
+      <br />
+      <br />
+      <img
+        className={style.image}
+        src={datosUser?.profileImage}
+        alt="Profile"
+      />
       <ShoppingView />
       <div>
-      <br /><br />
-      <h3 className={style.textProfile}> Name: </h3>
-          <h3  className={style.textP}>
+        <br />
+        <br />
+        <h3 className={style.textProfile}> Name: </h3>
+        <h3 className={style.textP}>
           {editingName ? (
             <input
               className={style.input}
@@ -130,26 +144,30 @@ const ProfileView = (props) => {
           )}
         </h3>
         <h3 className={style.textProfile}> User Name: </h3>
-          <h3  className={style.textP}>
-          {
-            editingUserName ? (
-              <input
-                className={style.input}
-                type="text"
-                value={newUserName}
-                onChange={handleUserNameChange}
-                placeholder={datosUser?.user_name}
-              />
-            ) : (
-              datosUser?.user_name
-            )
-            }
+        <h3 className={style.textP}>
+          {editingUserName ? (
+            <input
+              className={style.input}
+              type="text"
+              value={newUserName}
+              onChange={handleUserNameChange}
+              placeholder={datosUser?.user_name}
+            />
+          ) : (
+            datosUser?.user_name
+          )}
         </h3>
         <h3 className={style.textProfile}> Country: </h3>
-          <h3  className={style.textP}>
+        <h3 className={style.textP}>
           {editingCountry ? (
-            <select value={newCountry} onChange={handleCountryChange} className={style.select}>
-              <option value="" className={style.holder}>Select a country</option>
+            <select
+              value={newCountry}
+              onChange={handleCountryChange}
+              className={style.select}
+            >
+              <option value="" className={style.holder}>
+                Select a country
+              </option>
               {countries.map((country) => (
                 <option key={country} value={country}>
                   {country}
@@ -208,6 +226,6 @@ const ProfileView = (props) => {
       </div>
     </div>
   );
-}  
+};
 
 export default ProfileView;
