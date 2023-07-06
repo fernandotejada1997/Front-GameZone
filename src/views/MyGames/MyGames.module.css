@@ -45,7 +45,7 @@
 .cardPreview {
   outline: 6px solid rgb(41, 20, 178);
   color: white;
-  flex: 1; /* Ocupar el espacio restante */
+  flex: 1; /* Ocupar el espaci restante */
 }
 
 .title {
