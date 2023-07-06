@@ -152,20 +152,21 @@ const Detail = (props) => {
   const bkId = game && game?.id;
   const name = game && game?.name
 
-  const handleBack = () => {
-    history.push("/home");
+  const handleGoBack = () => {
+    history.goBack();
   };
 
   return (
     
     <div className={style.info}>
+      
       {isLoading ? (
         <div className={style.loading}>
           <PacmanLoader color="blue" size={80} speedMultiplier={1} />
         </div>
       ) : (
         <div className={style.container}>
-          <button className={`fa fa-arrow-circle-left ${style["backButton"]}`} onClick={() => handleBack()}></button>
+          <button className={`fa fa-arrow-circle-left ${style["backButton"]}`} onClick={() => handleGoBack()}></button>
           <div className={style.container_juego}>
           <div className={style.container_back}>
             </div>

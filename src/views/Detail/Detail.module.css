@@ -44,7 +44,7 @@
   margin-bottom: 0%;
   margin-left: 75px;
   font-weight: bold;
-  font-size: 40px;
+  font-size: 50px;
   cursor: pointer;
   color: white;
   
@@ -110,10 +110,11 @@
   margin: 0%;
 }
 .descripcionCont{
+  /* outline: green solid 3px; */
   display: flex;
-  height: 100%;
+  height: auto;
   width: 100%;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color:  rgb(206, 206, 206);
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
   margin: 10px;
@@ -426,4 +427,9 @@
   height: 70px;
   width: 70px;
   border-radius: 50%;
+}
+
+.backButton:hover {
+  background-color: transparent;
+  
 }

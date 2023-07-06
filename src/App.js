@@ -123,7 +123,7 @@ return (
         <Route path="/login" render={() => <Form/>} /> 
         <Route exact path="/detail/:id" render={(routeProps) => <Detail {...routeProps} />} />
         <Route path="/whishlist" render={() => <Whishlist />} />
-        <Route path="/dashboard" render={() => <Dashboard />} />
+        <PrivateRoute path="/dashboard" render={() => <Dashboard />} />
         <Route path="/search" render={() => <Search />} />
         <Route path="/review" render={() => <Review />} />
         <Route path="/allreview" render={() => <AllReviews />}/>

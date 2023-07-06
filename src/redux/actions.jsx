@@ -983,7 +983,6 @@ export const getMyGames = (id) => {
             console.error(error.message);    
         }
     }
-
 }
 
 //REVIEW

@@ -97,6 +97,18 @@ margin-left: 20px;
 margin-top: 25px;
 border-radius: 50%;
   }
+
+  .containerImage2{
+    /* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/Imagen\ Nico.jpeg");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px;
+border-radius: 50%;
+  }
   
   .containerImage3{
     /* outline: yellow solid 3px; */
@@ -104,6 +116,66 @@ float: left;
 height: 150px;
 width: 150px;
 background-image: url("../../../assets/Imagen\ Fer.jpg");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px;
+border-radius: 50%;
+  }
+
+  .containerImage4{
+    /* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/Imagen\ Diogo.jpeg");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px;
+border-radius: 50%;
+  }
+
+  .containerImage5{
+    /* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/Imagen\ Cristian.jpeg");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px;
+border-radius: 50%;
+  }
+
+  .containerImage6{
+    /* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/Imagen\ Mario.jpeg");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px;
+border-radius: 50%;
+  }
+
+  .containerImage7{
+    /* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/Imagen\ Esteban.jpeg");
+background-size: cover; 
+margin-left: 20px;
+margin-top: 25px;
+border-radius: 50%;
+  }
+  
+  .containerImage8{
+    /* outline: yellow solid 3px; */
+float: left;
+height: 150px;
+width: 150px;
+background-image: url("../../../assets/Imagen\ Dante.jpeg");
 background-size: cover; 
 margin-left: 20px;
 margin-top: 25px;
@@ -129,5 +201,10 @@ border-radius: 50%;
     cursor: pointer;
     color: white;
     position: absolute;
+    
+  }
+
+  .backButton:hover {
+    background-color: transparent;
     
   }
