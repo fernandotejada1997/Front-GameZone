@@ -110,7 +110,6 @@ export const getUsers = () => {
     const endpoint = `https://back-gamezone-production.up.railway.app/users`;
     return async (dispatch) => {
         const {data} = await axios.get(endpoint);
-        console.log("SSSSSSSS", data);
         return dispatch({
             type: GETALLUSERS,
             payload: data
@@ -149,28 +148,38 @@ export const editUser = (id, updatedUser) => {
     };
   };
   
-  export const banUser = (userId, banStatus) => {
-    return (dispatch) => {
+//   export const banUser = (userId, banStatus) => {
+//     return (dispatch) => {
     
-      fetch(`https://back-gamezone-production.up.railway.app/users/${userId}/ban`, { 
-        method: 'PUT',
-        body: JSON.stringify({ ban: banStatus }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
+//       fetch(`https://back-gamezone-production.up.railway.app/users/${userId}/ban`, { 
+//         method: 'PUT',
+//         body: JSON.stringify({ ban: banStatus }),
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//       })
+//         .then((response) => response.json())
+//         .then((data) => {
          
-          dispatch({ type: BAN_USER, payload: { userId, banStatus } });
+//           dispatch({ type: 'BAN_USER', payload: { userId, banStatus } });
+//         })
+//         .catch((error) => {
+         
+//           console.error('Error al banear el usuario:', error);
+         
+//         });
+//     };
+//   };
+export const banUser = (id) => {
+    const endpoint = `/users/${id}/ban`;
+    return async (dispatch) => {
+        const {data} = await axios.put(endpoint);
+        return dispatch({
+            type: BAN_USER,
+            payload: data
         })
-        .catch((error) => {
-         
-          console.error('Error al banear el usuario:', error);
-         
-        });
-    };
-  };
+    }
+}
 
 
 

@@ -39,6 +39,7 @@ const initialState = {
     banGames: {},  
     allusers: [],
     users: [],
+    ban: {}
 };
 
 const rootReducer=(state = initialState, action) => {
@@ -111,21 +112,31 @@ const rootReducer=(state = initialState, action) => {
               // Puedes realizar otras actualizaciones del estado aquí si es necesario
           };
         
+
+        // case act.BAN_USER:
+        //   const { userId, banStatus } = action.payload;
+        //   console.log('Información de la acción BAN_USER:', userId, banStatus);
+        //   const updatedUsers = state.users.map((user) => {
+        //       if (user.id === userId) {
+        //           return {
+        //               ...user,
+        //               ban: banStatus,
+        //           };
+        //       }
+        //       return user;
+        //   });
+        //   return {
+        //       ...state,
+        //       users: updatedUsers,
+        //   };
+
+
         case act.BAN_USER:
-          const { userId, banStatus } = action.payload;
-          const updatedUsers = state.users.map((user) => {
-              if (user.id === userId) {
-                  return {
-                      ...user,
-                      ban: banStatus,
-                  };
-              }
-              return user;
-          });
-          return {
-              ...state,
-              users: updatedUsers,
-          }
+                return {
+                    ...state,
+                    ban: action.payload
+                }
+
         //filtros combinadosconst combtype = "COMBTYPE"
         
         

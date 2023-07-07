@@ -18,7 +18,10 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import countries from '../../Form/countries';
-import style from './tabla.module.css';
+
+
+
+
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -46,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function UserList() {
+    const allusers = useSelector((state) => state.allusers)
     const classes = useStyles();
     const users = useSelector((state) => state.allusers);
     const dispatch = useDispatch();
@@ -57,7 +61,7 @@ function UserList() {
     useEffect(() => {
         dispatch(act.getUsers());
     }, [dispatch]);
-    console.log(users)
+    // console.log(users)
 
 
     const handleEdit = (rowIndex) => {
@@ -121,142 +125,185 @@ function UserList() {
         }
     };
 
-    const handleBan = async (rowIndex) => {
-        const { page, rowsPerPage } = muiTableRef.current.state;
-        const dataIndex = rowIndex % rowsPerPage;
-        const userIndex = dataIndex + page * rowsPerPage;
-        const bannedUser = users[userIndex];
-        const newData = [...users];
-        const rowData = newData[userIndex];
-        rowData.ban = !rowData.ban; // Cambiar el estado de ban
-        newData[userIndex] = rowData;
+    // const handleBan = async (rowIndex) => {
+    //     const { page, rowsPerPage } = muiTableRef.current.state;
+    //     const dataIndex = rowIndex % rowsPerPage;
+    //     const userIndex = dataIndex + page * rowsPerPage;
+    //     const bannedUser = users[userIndex];
+    //     const newData = [...users];
+    //     const rowData = newData[userIndex];
+    //     rowData.ban = !rowData.ban; 
+    //     newData[userIndex] = rowData;
 
-        // Actualizar el estado de ban correspondiente en el estado de Redux
-        const updatedUsers = [...users];
-        updatedUsers[userIndex].ban = rowData.ban;
-        dispatch({ type: 'SET_USERS', payload: updatedUsers });
+        
+    //     const updatedUsers = [...users];
+    //     updatedUsers[userIndex].ban = rowData.ban;
+    //     dispatch({ type: 'SET_USERS', payload: updatedUsers });
 
-        // Mostrar la alerta de confirmación antes de realizar el baneo
-        const confirmed = await Swal.fire({
-            title: '¿You re sure?',
-            text: '¿You want to ban ' + bannedUser.name + '?',
+       
+    //     const confirmed = await Swal.fire({
+    //         title: '¿You re sure?',
+    //         text: '¿You want to ban ' + bannedUser.name + '?',
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonText: 'Confirm',
+    //         cancelButtonText: 'Cancel',
+    //         reverseButtons: true
+    //     });
+
+    //     if (confirmed.isConfirmed) {
+    //         try {
+
+    //             await dispatch(act.banUser(bannedUser.id, rowData.ban));
+
+    //             Swal.fire('Updating Status ' + bannedUser.name)
+    //                 .then(() => {
+
+    //                     window.location.reload();
+    //                 });
+    //         } catch (error) {
+    //             console.error('Error when banning the user:', error);
+    //         }
+    //     } else {
+
+    //     }
+    // };
+
+    
+    const [isGameBlocked, setGameBlocked] = useState(false);
+
+    const handleBan = (rowIndex) => {
+        const rowData = data[rowIndex];
+        const gameId = rowData.id;
+        console.log(gameId)
+        Swal.fire({
+            title: 'Are you sure to change the state of the game?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
             reverseButtons: true
-        });
-
-        if (confirmed.isConfirmed) {
-            try {
-
-                await dispatch(act.banUser(bannedUser.id, rowData.ban));
-
-                Swal.fire('Updating Status ' + bannedUser.name)
-                    .then(() => {
-
-                        window.location.reload();
-                    });
-            } catch (error) {
-                console.error('Error when banning the user:', error);
-            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+            dispatch(act.banUser(gameId));
+            
+            setGameBlocked(true);
+            
+            Swal.fire({
+                title: 'The state of the game has been changed!',
+                icon: 'success',
+                text: 'The action has been carried out successfully!',
+            }).then(() => {
+                setGameBlocked(false);
+            })
         } else {
-
+            Swal.fire({
+                title: 'Action cancelled!',
+                icon: 'info',
+                text: 'No action was taken!',
+            });
         }
-    };
+    });
+};
 
-    const [openInfoModal, setOpenInfoModal] = useState(false);
+useEffect(() => {
+    if (isGameBlocked) {
+        dispatch(act.getUsers());
+    }
+}, [isGameBlocked, dispatch]);
 
-    const handleInfo = (rowIndex) => {
-        const { page, rowsPerPage } = muiTableRef.current.state;
-        const dataIndex = rowIndex % rowsPerPage;
-        const userIndex = dataIndex + page * rowsPerPage;
-        const selectedUser = users[userIndex];
-        setEditedUser(selectedUser);
-        setOpenInfoModal(true);
-    };
+const [openInfoModal, setOpenInfoModal] = useState(false);
 
-    const getMuiTheme = () =>
-        createTheme({
-            overrides: {
-                MUIDataTableBodyCell: {
-                    root: {
-                        cursor: 'pointer',
-                    },
-                },
+const handleInfo = (rowIndex) => {
+    const { page, rowsPerPage } = muiTableRef.current.state;
+    const dataIndex = rowIndex % rowsPerPage;
+    const userIndex = dataIndex + page * rowsPerPage;
+    const selectedUser = users[userIndex];
+    setEditedUser(selectedUser);
+    setOpenInfoModal(true);
+};
+
+const getMuiTheme = () =>
+createTheme({
+    overrides: {
+        MUIDataTableBodyCell: {
+            root: {
+                cursor: 'pointer',
             },
-        });
+        },
+    },
+});
 
 
-    const handleSave = () => {
-        if (!editedUser) {
-            return;
-        }
+const handleSave = () => {
+    if (!editedUser) {
+        return;
+    }
 
-        console.log('Edited user:', editedUser);
-        dispatch(act.editUser(editedUser.id, editedUser));
+    console.log('Edited user:', editedUser);
+    dispatch(act.editUser(editedUser.id, editedUser));
+    
+    setOpenModal(false);
+    
+    Swal.fire({
+        title: 'Edit Modificado',
+        text: 'The user has been successfully edited.',
+        icon: 'success',
+    });
+};
 
-        setOpenModal(false);
-
-        Swal.fire({
-            title: 'Edit Modificado',
-            text: 'The user has been successfully edited.',
-            icon: 'success',
-        });
-    };
 
 
-
-    return (
-        <div className= {style.total} >
-        <ThemeProvider theme={getMuiTheme()}>
+const data = allusers;
+return (
+    <ThemeProvider theme={getMuiTheme()}>
             <MUIDataTable
                 ref={muiTableRef}
                 title="Users List"
                 data={users}
                 columns={[
-                    { name: 'role', label: 'Type' },
+                    { name: 'id', label: 'Id' },
                     { name: 'name', label: 'Name' },
                     { name: 'user_name', label: 'UserName' },
                     { name: 'email', label: 'Email' },
                     { name: 'country', label: 'Country' },
                     {
-                        name: 'ban',
-                        label: 'Status',
-                        options: {
-                            filter: true,
-                            filterOptions: {
-                                names: ["Active", "Banned"],
-                            },
-                            customBodyRenderLite: (dataIndex) =>
-                                users[dataIndex].ban ? 'Banned' : 'Active',
+                    name: "ban",
+                    label: "GAMES STATUS",
+                    options: {
+                            customBodyRender: (value) => {
+                            console.log(value)
+                            return value ? "Banned" : "Active";
                         },
                     },
-
-
+    },
+                    
+                    
                     {
-                        name: 'ACTIONS',
+                        name: "Actions",
                         options: {
-                            filter: false,
-                            sort: false,
-                            customBodyRenderLite: (dataIndex, rowIndex) => (
-                                <div>
-                                    <IconButton onClick={() => handleEdit(rowIndex)}>
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton onClick={() => handleDelete(rowIndex)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                    <IconButton onClick={() => handleBan(rowIndex)}>
-                                        <BlockIcon />
-                                    </IconButton>
-                                    <IconButton onClick={() => handleInfo(rowIndex)}>
-                                        <InfoIcon />
-                                    </IconButton>
-                                </div>
-                            ),
+                        
+                            customBodyRender: (dataIndex, tableMeta, rowIndex) => {
+                            return (
+                                <div style={{ textAlign: 'center' }}>
+                                <IconButton onClick={() => handleEdit(tableMeta.rowIndex)}>
+                                  <EditIcon />
+                                </IconButton>
+                                <IconButton onClick={() => handleDelete(tableMeta.rowIndex)}>
+                                  <DeleteIcon />
+                                </IconButton>
+                                <IconButton onClick={() => handleBan(tableMeta.rowIndex)}>
+                                  <BlockIcon />
+                                </IconButton>
+                                <IconButton onClick={() => handleInfo(tableMeta.rowIndex)}>
+                                  <InfoIcon />
+                                </IconButton>
+                              </div>
+                            );
+                          },
+                          filter: false
                         },
-                    },
+                      },
                 ]}
             />
 
@@ -317,10 +364,10 @@ function UserList() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Button variant="contained" color="secondary" onClick={() => setOpenModal(false)}>
-                                        Cancel
+                                        Cancelar
                                     </Button>
                                     <Button variant="contained" color="primary" onClick={handleSave} style={{ marginLeft: '10px' }}>
-                                        Save
+                                        Guardar
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -366,7 +413,7 @@ function UserList() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Button variant="contained" color="primary" onClick={() => setOpenInfoModal(false)}>
-                                        Close
+                                        Cerrar
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -377,11 +424,7 @@ function UserList() {
 
 
         </ThemeProvider>
-        </div>
     );
 }
 
 export default UserList;
-
-
-
